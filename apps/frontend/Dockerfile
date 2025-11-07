@@ -1,0 +1,24 @@
+FROM node:18-alpine AS base
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine AS production
+
+COPY --from=base /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
+

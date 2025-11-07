@@ -1,0 +1,33 @@
+{
+  "name": "sms-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Student Management System for Radiant Readers' Academy",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "db:ensure": "node scripts/ensure-db.js",
+    "db:start": "docker compose up -d db",
+    "db:stop": "docker compose stop db",
+    "db:status": "docker compose ps db",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "dev:backend": "npm run db:ensure && npm run start:dev --workspace=apps/backend",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
